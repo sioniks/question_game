@@ -1,0 +1,66 @@
+@import 'normalize';
+@import 'mixin';
+@import 'fonts';
+
+html,
+body {
+  min-height: 100vh;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+html.no-scroll {
+  overflow: hidden;
+
+  body {
+    overflow: hidden;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: $op-r;
+  line-height: 1.4;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul {
+  padding-inline-start: 0;
+}
+
+.icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+
+.main-btn {
+  text-transform: uppercase;
+  text-align: center;
+  width: 210px;
+  height: 40px;
+  font-size: 14px;
+  line-height: 40px;
+  color: #fff;
+  background: linear-gradient(96.43deg, #00A0D4 0.7%, #004F80 100%);
+  border-radius: 6px;
+  border: none;
+  margin: 0 auto;
+  display: block;
+}

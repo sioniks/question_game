@@ -1,0 +1,50 @@
+@font-face {
+  font-family: "OpenSans-Light";
+  src: url("~/fonts/Open_Sans/OpenSans-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "OpenSans-Regular";
+  src: url("~/fonts/Open_Sans/OpenSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "OpenSans-Bold";
+  src: url("~/fonts/Open_Sans/OpenSans-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "OpenSans-SemiBold";
+  src: url("~/fonts/Open_Sans/OpenSans-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gabriela-Regular";
+  src: url("~/fonts/Gabriela/Gabriela-Regular.ttf") format("truetype");
+}
+
+// Var for using custom font
+$op-l: "OpenSans-Light",
+Helvetica,
+Arial,
+sans-serif;
+
+$op-r: "OpenSans-Regular",
+Helvetica,
+Arial,
+sans-serif;
+
+$op-b: "OpenSans-Bold",
+Helvetica,
+Arial,
+sans-serif;
+
+$op-sb: "OpenSans-SemiBold",
+Helvetica,
+Arial,
+sans-serif;
+
+$gab-r: "Gabriela-Regular",
+Helvetica,
+Arial,
+sans-serif;

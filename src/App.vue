@@ -1,17 +1,20 @@
 <template>
   <div id="app">
     
-    <StartScreen/>
+    <!-- <StartScreen/> -->
+    <Q1Screen/>
   </div>
 </template>
 
 <script>
-import StartScreen from './components/StartScreen.vue'
+// import StartScreen from './components/StartScreen.vue'
+import Q1Screen from './components/Q1Screen.vue'
 
 export default {
   name: 'app',
   components: {
-    StartScreen
+    // StartScreen
+    Q1Screen
   }
 }
 </script>
@@ -19,7 +22,7 @@ export default {
 <style lang="scss">
 
 #app {
-  background: red;
-  color: #000;
+  margin: 0;
+  padding: 0;
 }
 </style>

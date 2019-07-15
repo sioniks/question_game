@@ -1,6 +1,6 @@
-@import 'normalize';
-@import 'mixin';
-@import 'fonts';
+@import "normalize";
+@import "mixin";
+@import "fonts";
 
 html,
 body {
@@ -27,7 +27,7 @@ html.no-scroll {
   outline: none;
   padding: 0;
   margin: 0;
-  font-family: $op-r;
+  font-family: $seg;
   line-height: 1.4;
 
   &:focus {
@@ -49,7 +49,6 @@ ul {
   height: 100%;
 }
 
-
 .main-btn {
   text-transform: uppercase;
   text-align: center;
@@ -58,9 +57,16 @@ ul {
   font-size: 14px;
   line-height: 40px;
   color: #fff;
-  background: linear-gradient(96.43deg, #00A0D4 0.7%, #004F80 100%);
+  background: linear-gradient(96.43deg, #00a0d4 0.7%, #004f80 100%);
   border-radius: 6px;
   border: none;
   margin: 0 auto;
   display: block;
+  font-weight: 600;
+  @include media(t) {
+    width: 280px;
+    height: 60px;
+    font-size: 22px;
+    line-height: 60px;
+  }
 }

@@ -2,7 +2,9 @@
   <div class="start-screen" v-if="next">
     <div class="game__wrapper">
       <div class="img__wrapper">
-        <img src="~@/assets/icon/dialog-background.svg" alt class="img-bg" />
+        <!-- <img src="~@/assets/icon/dialog-background.svg" alt class="img-bg" /> -->
+        <img src="~@/assets/icon/part-upper.svg" alt class="img-bg top" />
+        <img src="~@/assets/icon/part-lower.svg" alt class="img-bg bottom" />
         <div class="buyer_question" :class="{active: check}">
           <p>{{ buyerQuestion }}</p>
         </div>
@@ -16,20 +18,20 @@
 
         <!-- <template v-if="check"> -->
         <div class="stan" :class="{ active: check}">
-          <!-- <img src="~@/assets/icon/seller-inactive.svg" alt="seller" class="img-seller inactive" />
-          <img src="~@/assets/icon/man-active.svg" alt="customer" class="img-buyer active" />-->
-          <img :src="buyer.firstState" alt="customer" class="img-buyer active" />
-          <img :src="seller.secondState" alt="seller" class="img-seller inactive" />
+          <img src="~@/assets/icon/seller-inactive.svg" alt="seller" class="img-seller inactive" />
+          <img src="~@/assets/icon/man-active.svg" alt="customer" class="img-buyer active" />
+          <!-- <img :src="buyer.firstState" alt="customer" class="img-buyer active" />
+          <img :src="seller.secondState" alt="seller" class="img-seller inactive" />-->
           <img src="~@/assets/icon/customer-emotion.svg" alt="emotion" class="buyer-emotion" />
         </div>
         <!-- </template> -->
         <!-- <template v-else> -->
         <div class="stan" :class="{ active: !check}">
-          <!-- <img src="~@/assets/icon/seller-active.svg" alt="seller" class="img-seller active" />
-          <img src="~@/assets/icon/man-inactive.svg" alt="customer" class="img-buyer inactive" />-->
+          <img src="~@/assets/icon/seller-active.svg" alt="seller" class="img-seller active" />
+          <img src="~@/assets/icon/man-inactive.svg" alt="customer" class="img-buyer inactive" />
 
-          <img :src="buyer.secondState" alt="customer" class="img-buyer inactive" />
-          <img :src="seller.firstState" alt="seller" class="img-seller active" />
+          <!-- <img :src="buyer.secondState" alt="customer" class="img-buyer inactive" />
+          <img :src="seller.firstState" alt="seller" class="img-seller active" />-->
           <img
             v-show="correctAnswer == checkedAnswer"
             src="~@/assets/icon/seller-emotion-good.svg"
@@ -307,6 +309,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
   transition: all 1s ease;
   opacity: 0;
   &.active {
@@ -318,7 +321,18 @@ export default {
   width: 100%;
   position: absolute;
   @include position(centerX);
-  bottom: 0;
+  // bottom: 0;
+  &.top {
+    top: 0;
+    z-index: 0;
+    @include media(t) {
+      top: -40px;
+    }
+  }
+  &.bottom {
+    bottom: 0;
+    z-index: 5;
+  }
 }
 .img-buyer {
   position: absolute;
@@ -441,6 +455,10 @@ export default {
   &.bad {
     background-image: url("~@/assets/icon/bubble-seller-red.svg");
   }
+  @media only screen and (max-width: 320px) {
+    padding: 25px 10px 50px 15px;
+    font-size: 10px;
+  }
   @include media(t) {
     padding: 30px 30px 85px 20px;
     min-height: 220px;
@@ -475,6 +493,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
+  z-index: 6;
   @include media(t) {
     height: 35%;
   }
@@ -535,9 +554,12 @@ export default {
   bottom: 5%;
   left: 5%;
   background: #fff;
-  z-index: 1;
+  z-index: 6;
   border-radius: 6px;
   padding-bottom: 30px;
+  @media only screen and (max-width: 320px) {
+    padding: 15px;
+  }
   @include media(t) {
     height: 26%;
   }
@@ -551,6 +573,10 @@ export default {
   text-align: center;
   width: 70%;
   margin-bottom: 20px;
+  @media only screen and (max-width: 320px) {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
 }
 
 .btn-line {

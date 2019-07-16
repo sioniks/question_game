@@ -46,14 +46,15 @@ export default {
 .game__wrapper {
   @include position(center);
   width: 90%;
-  height: 75%;
+  // height: 75%;
+  height: 90%;
   max-height: 523px;
   background: #fff;
   border-radius: 5px;
   padding: 30px 20px;
   @media only screen and (max-width: 320px) {
     padding: 10px;
-    height: 85%;
+    height: 90%;
   }
   @include media(t) {
     min-height: 767px;
@@ -116,6 +117,9 @@ export default {
   text-align: center;
   font-weight: 600;
   margin: 15px 0 25px;
+  @media only screen and (max-width: 320px) {
+    margin: 15px 0;
+  }
   @include media(t) {
     font-size: 18px;
   }

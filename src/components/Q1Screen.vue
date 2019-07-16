@@ -18,20 +18,20 @@
 
         <!-- <template v-if="check"> -->
         <div class="stan" :class="{ active: check}">
-          <img src="~@/assets/icon/seller-inactive.svg" alt="seller" class="img-seller inactive" />
-          <img src="~@/assets/icon/man-active.svg" alt="customer" class="img-buyer active" />
-          <!-- <img :src="buyer.firstState" alt="customer" class="img-buyer active" />
-          <img :src="seller.secondState" alt="seller" class="img-seller inactive" />-->
+          <!-- <img src="~@/assets/icon/seller-inactive.svg" alt="seller" class="img-seller inactive" />
+          <img src="~@/assets/icon/man-active.svg" alt="customer" class="img-buyer active" />-->
+          <img :src="buyer.firstState" alt="customer" class="img-buyer active" />
+          <img :src="seller.secondState" alt="seller" class="img-seller inactive" />
           <img src="~@/assets/icon/customer-emotion.svg" alt="emotion" class="buyer-emotion" />
         </div>
         <!-- </template> -->
         <!-- <template v-else> -->
         <div class="stan" :class="{ active: !check}">
-          <img src="~@/assets/icon/seller-active.svg" alt="seller" class="img-seller active" />
-          <img src="~@/assets/icon/man-inactive.svg" alt="customer" class="img-buyer inactive" />
+          <!-- <img src="~@/assets/icon/seller-active.svg" alt="seller" class="img-seller active" />
+          <img src="~@/assets/icon/man-inactive.svg" alt="customer" class="img-buyer inactive" />-->
 
-          <!-- <img :src="buyer.secondState" alt="customer" class="img-buyer inactive" />
-          <img :src="seller.firstState" alt="seller" class="img-seller active" />-->
+          <img :src="buyer.secondState" alt="customer" class="img-buyer inactive" />
+          <img :src="seller.firstState" alt="seller" class="img-seller active" />
           <img
             v-show="correctAnswer == checkedAnswer"
             src="~@/assets/icon/seller-emotion-good.svg"
@@ -49,7 +49,10 @@
       </div>
 
       <div class="question__wrapper">
-        <p class="question" :class="[smallQuestion, {hide: !check}]">{{ question }}</p>
+        <p
+          class="question"
+          :class="[smallQuestion, {hide: !check}]"
+        >{{ literals.recommedit_questionheader }}</p>
         <template v-if="check">
           <button @click="detectAnswer" class="question-btn main-btn">{{ shuffle[0] }}</button>
           <button @click="detectAnswer" class="question-btn main-btn">{{ shuffle[1] }}</button>
@@ -136,6 +139,10 @@ export default {
         `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=${
           this.literals.gameId ? this.literals.gameId : 2
         }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`
+
+        // `http://salesforce-iframe-back-stag-ru.herokuapp.com/Games/RecommendIt/Next?game=${
+        //   this.literals.gameId ? this.literals.gameId : 2
+        // }`
       )
       .then(response => {
         this.currentQuestion = response.data;
@@ -194,6 +201,9 @@ export default {
       }&id=${
         this.questionId
       }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
+      // let qNextApi = `http://salesforce-iframe-back-stag-ru.herokuapp.com/Games/RecommendIt/Next?game=${
+      //   this.literals.gameId ? this.literals.gameId : 2
+      // }&id=${this.questionId}`;
 
       axios.get(qNextApi).then(response => {
         this.currentQuestion = response.data;
@@ -235,6 +245,9 @@ export default {
       let restartApi = `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=${
         this.literals.gameId ? this.literals.gameId : 2
       }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
+      // let restartApi = `http://salesforce-iframe-back-stag-ru.herokuapp.com/Games/RecommendIt/Next?game=${
+      //   this.literals.gameId ? this.literals.gameId : 2
+      // }`;
 
       axios.get(restartApi).then(response => {
         this.currentQuestion = response.data;
@@ -278,11 +291,14 @@ export default {
 .game__wrapper {
   @include position(center);
   width: 100%;
-  height: 80%;
+  height: 85%;
   background: #e1e9ec;
   padding: 10px;
   max-height: 588px;
   max-width: 415px;
+  @media only screen and (max-width: 320px) {
+    height: 90%;
+  }
   @include media(t) {
     padding: 10px 30px;
 
@@ -325,12 +341,15 @@ export default {
   &.top {
     top: 0;
     z-index: 0;
+    @media only screen and (max-width: 320px) {
+      top: 10px;
+    }
     @include media(t) {
       top: -40px;
     }
   }
   &.bottom {
-    bottom: 0;
+    bottom: 5px;
     z-index: 5;
   }
 }
@@ -380,13 +399,16 @@ export default {
 .buyer-emotion {
   width: 20%;
   position: absolute;
-  bottom: 67%;
+  bottom: 63%;
   left: 6%;
   animation-name: buyer-emotion;
   animation-duration: 1s;
   animation-timing-function: cubic-bezier(1, -1.35, 0, 2.38);
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
+  @media only screen and (max-width: 320px) {
+    bottom: 59%;
+  }
 }
 
 @keyframes buyer-emotion {
@@ -400,7 +422,7 @@ export default {
 
 .buyer_question {
   background-image: url("~@/assets/icon/bubble-customer.svg");
-  min-width: 55%;
+  min-width: 60%;
   min-height: 120px;
   height: auto;
   width: auto;
@@ -421,6 +443,11 @@ export default {
   &.active {
     transform: translate(-50%, 0) scale(1);
   }
+  @media only screen and (max-width: 320px) {
+    min-height: 100px;
+    padding: 20px 10px 50px 15px;
+    bottom: 58%;
+  }
   @include media(t) {
     padding: 50px 20px 85px 30px;
     min-height: 220px;
@@ -428,7 +455,7 @@ export default {
   }
 }
 .seller_answer {
-  min-width: 60%;
+  min-width: 63%;
   min-height: 120px;
   height: auto;
   width: auto;
@@ -439,7 +466,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   // background-color: red;
-  padding: 20px 10px 20px 15px;
+  padding: 15px 10px 20px 15px;
   color: #fff;
   font-size: 12px;
   line-height: 1.3;
@@ -456,8 +483,10 @@ export default {
     background-image: url("~@/assets/icon/bubble-seller-red.svg");
   }
   @media only screen and (max-width: 320px) {
-    padding: 25px 10px 50px 15px;
+    padding: 22px 10px 50px 15px;
     font-size: 10px;
+    min-height: 100px;
+    bottom: 58%;
   }
   @include media(t) {
     padding: 30px 30px 85px 20px;
@@ -469,13 +498,16 @@ export default {
 .seller-emotion {
   width: 20%;
   position: absolute;
-  bottom: 63%;
+  bottom: 60%;
   right: 3%;
   animation-name: seller-emotion;
   animation-duration: 1s;
   animation-timing-function: cubic-bezier(1, -1.35, 0, 2.38);
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
+  @media only screen and (max-width: 320px) {
+    bottom: 59%;
+  }
 }
 
 @keyframes seller-emotion {
@@ -507,6 +539,7 @@ export default {
   line-height: 1.2;
   margin-bottom: 10px;
   padding: 0 20px;
+  // z-index: 3;
   transition: all 0.5s ease;
   &.small {
     margin: 20px 0;
@@ -588,6 +621,9 @@ export default {
     width: auto;
     padding: 0 20px;
     margin: 0 10px;
+    @media only screen and (max-width: 320px) {
+      padding: 0 15px;
+    }
   }
   .next-question {
     background: #ced2d8;

@@ -118,7 +118,8 @@ export default {
   font-weight: 600;
   margin: 15px 0 25px;
   @media only screen and (max-width: 320px) {
-    margin: 15px 0;
+    margin: 10px 0;
+    font-size: 13px;
   }
   @include media(t) {
     font-size: 18px;

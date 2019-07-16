@@ -77,7 +77,7 @@
         <template v-else>
           <p class="result-text">{{literals.recommendit_wrong}}</p>
           <div class="btn-line">
-            <button class="main-btn" @click="restartLevel">{{literals.recommendit_retrybutton}}</button>
+            <button class="main-btn" @click="restartGame">{{literals.recommendit_retrybutton}}</button>
             <button class="main-btn next-question" @click="theEnd">{{ literals.recommendit_next }}</button>
           </div>
         </template>
@@ -109,34 +109,37 @@ export default {
     return {
       info: null,
       currentQuestion: null,
-      question: "Що Ви вiдповісте покупцевi?",
-      answer: [
-        "Зверніть увагу на новий WINSTON. Капсула із нотками цитрусових фруктів",
-        "Зверніть увагу на новий Philip Morris Novel Mix Sun. Капсула із нотками цитрусових фруктів"
-      ],
+      question: "",
+      answer: ["", ""],
       check: true,
       buyer: null,
-      buyerQuestion: "А що у Вас є із фруктовою капсулою?",
-      correctAnswer:
-        "Зверніть увагу на новий WINSTON. Капсула із нотками цитрусових фруктів",
+      buyerQuestion: "",
+      correctAnswer: "",
       checkedAnswer: "",
       questionId: 0,
       prevQuestion: 0,
+      firstQuestion: 0,
       hasNext: false,
       fails: 0
     };
   },
 
   mounted() {
+    //get gameID from query parametr
+    const url = new URL(window.location.href);
+    this.literals.gameId = url.searchParams.get("game");
+
     axios
       .get(
-        "https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=2&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt"
+        `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=${
+          this.literals.gameId ? this.literals.gameId : 2
+        }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`
       )
       .then(response => {
         this.currentQuestion = response.data;
         this.questionId = response.data.id;
         this.hasNext = response.data.hasNext;
-        this.prevQuestion = response.data.prevId;
+        this.firstQuestion = response.data.id;
         this.buyerQuestion = response.data.questionTitle;
         this.correctAnswer = response.data.correctAnswer.trim();
         this.answer[0] = response.data.correctAnswer;
@@ -184,7 +187,11 @@ export default {
       }
     },
     nextLevel: function() {
-      let qNextApi = `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=2&id=${this.questionId}&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
+      let qNextApi = `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=${
+        this.literals.gameId ? this.literals.gameId : 2
+      }&id=${
+        this.questionId
+      }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
 
       axios.get(qNextApi).then(response => {
         this.currentQuestion = response.data;
@@ -200,14 +207,37 @@ export default {
       });
       this.check = !this.check;
     },
-    restartLevel: function() {
-      let qNextApi = `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=2&id=${this.prevQuestion}&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
+    // restartLevel: function() {
+    //   let qNextApi = `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=${
+    //     this.literals.gameId ? this.literals.gameId : 2
+    //   }&id=${
+    //     this.prevQuestion
+    //   }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
 
-      axios.get(qNextApi).then(response => {
+    //   axios.get(qNextApi).then(response => {
+    //     this.currentQuestion = response.data;
+    //     this.questionId = response.data.id;
+    //     this.hasNext = response.data.hasNext;
+    //     this.prevQuestion = response.data.prevId;
+    //     this.buyer = response.data.buyer;
+    //     this.buyerQuestion = response.data.questionTitle;
+    //     this.correctAnswer = response.data.correctAnswer.trim();
+    //     this.answer[0] = response.data.correctAnswer;
+    //     this.answer[1] = response.data.wrongAnswer;
+    //     // console.log("nextlevel API", response.data);
+    //   });
+    //   this.check = !this.check;
+    //   this.fails -= 1;
+    // },
+    restartGame: function() {
+      let restartApi = `https://iframe-mta-stage-games.brights.io/RecommendIt/Next?game=${
+        this.literals.gameId ? this.literals.gameId : 2
+      }&QUERY=LDDFnDrHsxDhH5Cfz6Iu4peu4jBptK%2BNxjAh1uThMtsNxuaVG90OUN8GO0t5RADymTWH5VFelL8Ig1R0IGWbIuqGtf4WIb%2Blv2AqMtimNMHypp8DWCrFa%2B3YHWs34%2Fshdb9SaDmPbf%2FlYhqppPbHQkdzA4KP29Xj0k3WXyjYtYRqBejC3hw9NPLcKM2yjTwBmexznskVUM8TD9Zk5W9LdLFGwbu3XFR0OMmxN2Ejvmbtp82yKgReMrW8Y3pr4D6NBcv04m06GoSKHsIs6Ckeg0wS%2BcehiYtlRddi3GsHHJwF3BcD%2BjIk%2Bxo3%2Bz8rmEm5xW31abDQfLElP4OzNlGAedKQZ7oLSL4mPe2ZO6LwpuCC4Zq33zcDtuNKkbhUQr0z5M0UMVJzRTKe%2FQwcbH4Yrjt2dbRGWirNGHcb4mqfL1a45BCjlmDnmWGScUfq3h2wP%2FvS9NNiZFazy%2B0CfVcbRZvPcsjBmGCF2oYASDzs6WXoWrifTfsuDf%2FeGvaoTJUQyFCfogaNU8HXks75nxS5ELOyIeQBvJy1RyQmaKtUZQxyTcQg%2BI9VOnIx%2FwN%2F%2BpfbL9GwNlLpJaa5Y%2FHJ8H%2Byf4Qa3NsQTKSg4eSRyflY3YqlHNZBqA0USoF7umlH5zTt`;
+
+      axios.get(restartApi).then(response => {
         this.currentQuestion = response.data;
         this.questionId = response.data.id;
         this.hasNext = response.data.hasNext;
-        this.prevQuestion = response.data.prevId;
         this.buyer = response.data.buyer;
         this.buyerQuestion = response.data.questionTitle;
         this.correctAnswer = response.data.correctAnswer.trim();
@@ -216,7 +246,9 @@ export default {
         // console.log("nextlevel API", response.data);
       });
       this.check = !this.check;
-      this.fails -= 1;
+      this.fails = 0;
+
+      this.$emit("next-point", this.fails);
     },
     theEnd: function() {
       this.hasNext ? this.nextLevel() : this.$emit("end-game", this.fails);

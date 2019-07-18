@@ -65,8 +65,8 @@ export default {
   methods: {
     startGame: function() {
       //get gameID from query parametr
-      const url = new URL(window.location.href);
-      this.literals.gameId = url.searchParams.get("game");
+      const gameID = document.getElementById("appId").dataset.gameid;
+      console.log(gameID);
       //get data from start API
       axios
         .get(
@@ -83,6 +83,7 @@ export default {
           this.seller = response.data.seller;
           this.literals.gameId = response.data.gameId;
           this.literals.win = response.data.newPlayer;
+          this.literals.points = response.data.points;
           // console.log("first API", this.literals);
         });
     },

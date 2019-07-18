@@ -4,8 +4,8 @@
       <div class="info__wrapper">
         <template v-if="fails == 0">
           <img src="~@/assets/icon/result-good.svg" alt="emotion-image" class="result-image" />
-          <p v-if="literals.win" class="result-text">{{literals.recommendit_win}}</p>
-          <p v-else class="result-text">{{literals.recommendit_win-standart}}</p>
+          <p v-if="literals.win" class="result-text">{{ winText() }}</p>
+          <p v-else class="result-text">{{literals.recommendit_win_standart}}</p>
           <a
             :href="literals.recommedit_homeurl"
             class="main-btn result-btn"
@@ -43,6 +43,18 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    winText: function() {
+      console.log(this.literals.recommendit_win);
+      console.log(this.literals.points);
+      let text = this.literals.recommendit_win.replace(
+        "{0}",
+        this.literals.points
+      );
+      console.log(text);
+      return text;
+    }
   }
 };
 </script>
